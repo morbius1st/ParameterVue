@@ -49,8 +49,6 @@
 			<Setter Property="VerticalAlignment" Value="Center" />
 		</Style>
 
-		<!-- <Setter Property="FontSize" Value="{Binding ElementName=mainWindow, Path=lbc.HeaderFont.FontSize, Mode=OneWay}" /> -->
-		<!-- <Setter Property="FontFamily" Value="{Binding ElementName=mainWindow, Path=lbc.HeaderFont.FontFamily, Mode=OneWay}" /> -->
 		<Style x:Key="{x:Static local:MainWindow.ColHeaderTbkStyleName}"
 				TargetType="{x:Type TextBlock}"
 				>
@@ -336,8 +334,9 @@
 		<Style x:Key="DataGridColumnHeaderStyle3"
 				TargetType="{x:Type DataGridColumnHeader}"
 				>
+			<Setter Property="VerticalAlignment" Value="Bottom"/>
 			<Setter Property="ContentTemplate" Value="{DynamicResource HeaderTemplate1}" />
-			<Setter Property="Margin" Value="1,2,2,1" />
+			<Setter Property="Margin" Value="3,1,3,1" />
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate
@@ -406,10 +405,11 @@
 					</FontWeight>
 					<SolidColorBrush x:Key="Ftb"
 							>
-						White
+						Black
 					</SolidColorBrush>
 				</Grid.Resources>
-				<TextBlock Name="HeaderBox"
+				<TextBlock Name="HeaderBlk"
+						Margin="3,0,3,0"
 						FontFamily="{Binding HeaderFont.FontFamily, FallbackValue={StaticResource FtFam}, Mode=OneWay}"
 						FontSize="{Binding HeaderFont.FontSize, FallbackValue={StaticResource FtSz}, Mode=OneWay}"
 						FontStretch="{Binding HeaderFont.FontStretch, FallbackValue={StaticResource FtStr}, Mode=OneWay}"
@@ -418,7 +418,107 @@
 						Text="{Binding Path=ColumnTitle, FallbackValue='none2', Mode=OneWay}"
 						TextWrapping="Wrap"
 						Foreground="{Binding HeaderFont.Foreground, FallbackValue={StaticResource Ftb}, Mode=OneWay}"
+						VerticalAlignment="Bottom"
 						/>
+			</Grid>
+		</DataTemplate>
+
+		<BooleanToVisibilityConverter x:Key="bool2VisibilityConverter"
+				/>
+
+		<Style x:Key="RowHeaderGripperStyle"
+				TargetType="{x:Type Thumb}"
+				>
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="Cursor" Value="SizeNS" />
+			<Setter Property="Height" Value="8" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate
+							TargetType="{x:Type Thumb}"
+							>
+						<Border
+								Padding="{TemplateBinding Padding}"
+								Background="{TemplateBinding Background}"
+								/>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+		<Style x:Key="DataGridRowHeaderStyle1"
+				TargetType="{x:Type DataGridRowHeader}"
+				>
+
+			<Setter Property="ContentTemplate" Value="{DynamicResource RowHeaderTemplate1}" />
+
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate
+							TargetType="{x:Type DataGridRowHeader}"
+							>
+						<Grid>
+							<Themes:DataGridHeaderBorder
+									Padding="{TemplateBinding Padding}"
+									Orientation="Horizontal"
+									SeparatorVisibility="{TemplateBinding SeparatorVisibility}"
+									Background="{TemplateBinding Background}"
+									BorderThickness="{TemplateBinding BorderThickness}"
+									BorderBrush="{TemplateBinding BorderBrush}"
+									SeparatorBrush="{TemplateBinding SeparatorBrush}"
+									IsHovered="{TemplateBinding IsMouseOver}"
+									IsPressed="{TemplateBinding IsPressed}"
+									IsSelected="{TemplateBinding IsRowSelected}"
+									>
+								<StackPanel
+										Orientation="Horizontal"
+										>
+									<ContentPresenter
+											HorizontalAlignment="Center"
+											VerticalAlignment="Center"
+											RecognizesAccessKey="True"
+											SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+											/>
+									<Control
+											SnapsToDevicePixels="false"
+											Visibility="{Binding (Validation.HasError), Converter={StaticResource bool2VisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}"
+											Template="{Binding ValidationErrorTemplate, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}"
+											/>
+								</StackPanel>
+							</Themes:DataGridHeaderBorder>
+							<Thumb x:Name="PART_TopHeaderGripper"
+									VerticalAlignment="Top"
+									Style="{StaticResource RowHeaderGripperStyle}"
+									/>
+							<Thumb x:Name="PART_BottomHeaderGripper"
+									VerticalAlignment="Bottom"
+									Style="{StaticResource RowHeaderGripperStyle}"
+									/>
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+		<DataTemplate x:Key="RowHeaderTemplate1"
+				DataType="{x:Type familyInfo:FamilyData}"
+				>
+			<Grid
+					DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridRow}}, Path=DataContext}"
+					>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="30" />
+					<ColumnDefinition Width="60" />
+				</Grid.ColumnDefinitions>
+				<CheckBox
+						Grid.Column="0"
+						IsChecked="{Binding Selected, FallbackValue='true', Mode=TwoWay}"
+						/>
+				<TextBlock
+						Grid.Column="1"
+						Text="{Binding Path=FamilyName, FallbackValue='none', Mode=OneWay}"
+						/>
+
 			</Grid>
 		</DataTemplate>
 
@@ -437,8 +537,9 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="130" />
 			<RowDefinition Height="130" />
-			<RowDefinition Height="130" />
-			<RowDefinition Height="*" />
+			<RowDefinition Height="1*" />
+			<RowDefinition />
+			<RowDefinition />
 
 		</Grid.RowDefinitions>
 
@@ -638,7 +739,7 @@
 		<!--#endregion-->
 
 		<Button x:Name="buttonTestDb" Content="Debug"
-				Grid.Row="3"
+				Grid.Row="4"
 				Grid.Column="1"
 				Margin="0,0,10.2,10"
 				Width="84"
@@ -647,323 +748,312 @@
 				VerticalAlignment="Bottom"
 				Click="Button_Debug"
 				/>
-		<Grid
+
+		<DataGrid x:Name="dataGrid3"
 				Grid.Row="3"
+				Margin="0,0,0,10"
+				HorizontalAlignment="Stretch"
+				VerticalAlignment="Stretch"
+				FontSize="8"
+				d:DataContext="{d:DesignInstance d:Type=local:MainWindow,
+																				 IsDesignTimeCreatable=True}"
+				AutoGenerateColumns="True"
+				AutoGeneratingColumn="DataGrid3_AutoGeneratingColumn"
+				RowDetailsVisibilityMode="Visible"
+				ItemsSource="{Binding Fm.Fd}"
+				>
+			<DataGrid.RowDetailsTemplate>
+				<DataTemplate>
+					<Border
+							BorderThickness="1"
+							BorderBrush="Red"
+							>
+						<DataGrid
+								Height="Auto"
+								HorizontalAlignment="Stretch"
+								AutoGenerateColumns="True"
+								ItemsSource="{Binding ParameterValues}"
+								/>
+					</Border>
+				</DataTemplate>
+			</DataGrid.RowDetailsTemplate>
+		</DataGrid>
+
+		<DataGrid x:Name="dataGrid4"
+				Grid.Row="4"
 				Grid.Column="0"
-				Height="Auto"
+				Margin="0,0,0,5"
+				HorizontalAlignment="Stretch"
+				VerticalAlignment="Stretch"
+				FontSize="8"
+				d:DataContext="{d:DesignInstance d:Type=local:MainWindow,
+																				 IsDesignTimeCreatable=True}"
+				AutoGenerateColumns="True"
+				AutoGeneratingColumn="DataGrid4_AutoGeneratingColumn"
+				ColumnWidth="Auto"
+				RowDetailsVisibilityMode="Visible"
+				ItemsSource="{Binding Fm.Cd}"
 				>
 
-			<Grid.RowDefinitions>
-				<RowDefinition Height="*" />
-				<RowDefinition Height="*" />
-			</Grid.RowDefinitions>
-			<DataGrid x:Name="dataGrid3"
-					Grid.Row="0"
-					Margin="0,0,0,5"
-					HorizontalAlignment="Stretch"
-					VerticalAlignment="Stretch"
-					FontSize="8"
-					d:DataContext="{d:DesignInstance d:Type=local:MainWindow,
-																					 IsDesignTimeCreatable=True}"
-					AutoGenerateColumns="True"
-					RowDetailsVisibilityMode="Visible"
-					ItemsSource="{Binding Fm.Fd}" AutoGeneratingColumn="DataGrid3_AutoGeneratingColumn"
-
-					>
-				<DataGrid.RowDetailsTemplate>
-					<DataTemplate>
-						<Border
-								BorderThickness="1"
-								BorderBrush="Red"
-								>
-							<DataGrid
-									Height="Auto"
-									HorizontalAlignment="Stretch"
-									AutoGenerateColumns="True"
-									ItemsSource="{Binding ParameterValues}"
-									/>
-						</Border>
-					</DataTemplate>
-				</DataGrid.RowDetailsTemplate>
-			</DataGrid>
-
-			<DataGrid x:Name="dataGrid4"
-					Grid.Row="1"
-					Margin="0,0,0,5"
-					HorizontalAlignment="Stretch"
-					VerticalAlignment="Stretch"
-					FontSize="8"
-					d:DataContext="{d:DesignInstance d:Type=local:MainWindow,
-																					 IsDesignTimeCreatable=True}"
-					AutoGenerateColumns="True"
-					ColumnWidth="Auto"
-					RowDetailsVisibilityMode="Visible"
-					ItemsSource="{Binding Fm.Cd}" 
-					AutoGeneratingColumn="DataGrid4_AutoGeneratingColumn"
-
-					>
-
-				<DataGrid.RowDetailsTemplate>
-					<DataTemplate
-							DataType="{x:Type familyInfo:ColumnSpec}"
+			<DataGrid.RowDetailsTemplate>
+				<DataTemplate
+						DataType="{x:Type familyInfo:ColumnSpec}"
+						>
+					<Grid
+							Height="52"
 							>
-						<Grid
-								Height="52"
+						<Grid.RowDefinitions>
+							<RowDefinition Height="12" />
+							<RowDefinition Height="12" />
+							<RowDefinition Height="12" />
+							<RowDefinition Height="12" />
+						</Grid.RowDefinitions>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="50" />
+
+							<ColumnDefinition Width="45" />
+							<ColumnDefinition Width="45" />
+							<ColumnDefinition Width="45" />
+							<ColumnDefinition Width="45" />
+							<ColumnDefinition Width="45" />
+							<ColumnDefinition Width="60" />
+
+						</Grid.ColumnDefinitions>
+
+
+						<Border
+								Grid.Row="0"
+								Grid.RowSpan="2"
+								Grid.Column="0"
+								BorderThickness="1"
+								BorderBrush="Blue"
 								>
-							<Grid.RowDefinitions>
-								<RowDefinition Height="12" />
-								<RowDefinition Height="12" />
-								<RowDefinition Height="12" />
-								<RowDefinition Height="12" />
-							</Grid.RowDefinitions>
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="50" />
-
-								<ColumnDefinition Width="45" />
-								<ColumnDefinition Width="45" />
-								<ColumnDefinition Width="45" />
-								<ColumnDefinition Width="45" />
-								<ColumnDefinition Width="45" />
-								<ColumnDefinition Width="60" />
-
-							</Grid.ColumnDefinitions>
-
-
-							<Border
-									Grid.Row="0"
-									Grid.RowSpan="2"
-									Grid.Column="0"
-									BorderThickness="1"
-									BorderBrush="Blue"
+							<Label
+									Style="{StaticResource RowDetailLabel}"
 									>
-								<Label
-										Style="{StaticResource RowDetailLabel}"
+								<TextBlock
+										TextWrapping="Wrap"
 										>
-									<TextBlock
-											TextWrapping="Wrap"
-											>
-										Header Font
-									</TextBlock>
-								</Label>
-							</Border>
+									Header Font
+								</TextBlock>
+							</Label>
+						</Border>
 
+						<Label
+								Grid.Row="0"
+								Grid.Column="1"
+								Style="{StaticResource RowDetailLabel}"
+								>
+							<TextBlock
+									Text="font family"
+									TextWrapping="Wrap"
+									/>
+						</Label>
+
+						<Label Content="{Binding HeaderFont.FontFamily}"
+								Grid.Row="1"
+								Grid.Column="1"
+								Style="{StaticResource RowDetailLabel}"
+								/>
+
+						<Label
+								Grid.Row="0"
+								Grid.Column="2"
+								Style="{StaticResource RowDetailLabel}"
+								>
+							<TextBlock
+									Text="font size"
+									TextWrapping="Wrap"
+									/>
+						</Label>
+						<Label Content="{Binding HeaderFont.FontSize}"
+								Grid.Row="1"
+								Grid.Column="2"
+								Style="{StaticResource RowDetailLabel}"
+								/>
+
+						<Label
+								Grid.Row="0"
+								Grid.Column="3"
+								Style="{StaticResource RowDetailLabel}"
+								>
+							<TextBlock
+									Text="font stretch"
+									TextWrapping="Wrap"
+									/>
+						</Label>
+						<Label Content="{Binding HeaderFont.FontStretch}"
+								Grid.Row="1"
+								Grid.Column="3"
+								Style="{StaticResource RowDetailLabel}"
+								/>
+
+						<Label
+								Grid.Row="0"
+								Grid.Column="4"
+								Style="{StaticResource RowDetailLabel}"
+								>
+							<TextBlock
+									Text="font style"
+									TextWrapping="Wrap"
+									/>
+						</Label>
+						<Label Content="{Binding HeaderFont.FontStyle}"
+								Grid.Row="1"
+								Grid.Column="4"
+								Style="{StaticResource RowDetailLabel}"
+								/>
+
+						<Label
+								Grid.Row="0"
+								Grid.Column="5"
+								Style="{StaticResource RowDetailLabel}"
+								>
+							<TextBlock
+									Text="font weight"
+									TextWrapping="Wrap"
+									/>
+						</Label>
+						<Label Content="{Binding HeaderFont.FontWeight}"
+								Grid.Row="1"
+								Grid.Column="5"
+								Style="{StaticResource RowDetailLabel}"
+								/>
+
+						<Label
+								Grid.Row="0"
+								Grid.Column="6"
+								Style="{StaticResource RowDetailLabel}"
+								>
+							<TextBlock
+									Text="foreground"
+									TextWrapping="Wrap"
+									/>
+						</Label>
+						<Label Content="{Binding HeaderFont.Foreground}"
+								Grid.Row="1"
+								Grid.Column="6"
+								Style="{StaticResource RowDetailLabel}"
+								/>
+
+						<Border
+								Grid.Row="2"
+								Grid.RowSpan="2"
+								Grid.Column="0"
+								BorderThickness="1"
+								BorderBrush="Chartreuse"
+								>
 							<Label
-									Grid.Row="0"
-									Grid.Column="1"
 									Style="{StaticResource RowDetailLabel}"
 									>
 								<TextBlock
-										Text="font family"
 										TextWrapping="Wrap"
-										/>
-							</Label>
-
-							<Label Content="{Binding HeaderFont.FontFamily}"
-									Grid.Row="1"
-									Grid.Column="1"
-									Style="{StaticResource RowDetailLabel}"
-									/>
-
-							<Label
-									Grid.Row="0"
-									Grid.Column="2"
-									Style="{StaticResource RowDetailLabel}"
-									>
-								<TextBlock
-										Text="font size"
-										TextWrapping="Wrap"
-										/>
-							</Label>
-							<Label Content="{Binding HeaderFont.FontSize}"
-									Grid.Row="1"
-									Grid.Column="2"
-									Style="{StaticResource RowDetailLabel}"
-									/>
-
-							<Label
-									Grid.Row="0"
-									Grid.Column="3"
-									Style="{StaticResource RowDetailLabel}"
-									>
-								<TextBlock
-										Text="font stretch"
-										TextWrapping="Wrap"
-										/>
-							</Label>
-							<Label Content="{Binding HeaderFont.FontStretch}"
-									Grid.Row="1"
-									Grid.Column="3"
-									Style="{StaticResource RowDetailLabel}"
-									/>
-
-							<Label
-									Grid.Row="0"
-									Grid.Column="4"
-									Style="{StaticResource RowDetailLabel}"
-									>
-								<TextBlock
-										Text="font style"
-										TextWrapping="Wrap"
-										/>
-							</Label>
-							<Label Content="{Binding HeaderFont.FontStyle}"
-									Grid.Row="1"
-									Grid.Column="4"
-									Style="{StaticResource RowDetailLabel}"
-									/>
-
-							<Label
-									Grid.Row="0"
-									Grid.Column="5"
-									Style="{StaticResource RowDetailLabel}"
-									>
-								<TextBlock
-										Text="font weight"
-										TextWrapping="Wrap"
-										/>
-							</Label>
-							<Label Content="{Binding HeaderFont.FontWeight}"
-									Grid.Row="1"
-									Grid.Column="5"
-									Style="{StaticResource RowDetailLabel}"
-									/>
-
-							<Label
-									Grid.Row="0"
-									Grid.Column="6"
-									Style="{StaticResource RowDetailLabel}"
-									>
-								<TextBlock
-										Text="foreground"
-										TextWrapping="Wrap"
-										/>
-							</Label>
-							<Label Content="{Binding HeaderFont.Foreground}"
-									Grid.Row="1"
-									Grid.Column="6"
-									Style="{StaticResource RowDetailLabel}"
-									/>
-
-							<Border
-									Grid.Row="2"
-									Grid.RowSpan="2"
-									Grid.Column="0"
-									BorderThickness="1"
-									BorderBrush="Chartreuse"
-									>
-								<Label
-										Style="{StaticResource RowDetailLabel}"
 										>
-									<TextBlock
-											TextWrapping="Wrap"
-											>
-										Header Font
-									</TextBlock>
-								</Label>
-							</Border>
-
-							<Label
-									Grid.Row="2"
-									Grid.Column="1"
-									Style="{StaticResource RowDetailLabel}"
-									>
-								<TextBlock
-										Text="font family"
-										TextWrapping="Wrap"
-										/>
+									Header Font
+								</TextBlock>
 							</Label>
-							<Label Content="{Binding FieldFont.FontFamily}"
-									Grid.Row="3"
-									Grid.Column="1"
-									Style="{StaticResource RowDetailLabel}"
+						</Border>
+
+						<Label
+								Grid.Row="2"
+								Grid.Column="1"
+								Style="{StaticResource RowDetailLabel}"
+								>
+							<TextBlock
+									Text="font family"
+									TextWrapping="Wrap"
 									/>
+						</Label>
+						<Label Content="{Binding FieldFont.FontFamily}"
+								Grid.Row="3"
+								Grid.Column="1"
+								Style="{StaticResource RowDetailLabel}"
+								/>
 
-							<Label
-									Grid.Row="2"
-									Grid.Column="2"
-									Style="{StaticResource RowDetailLabel}"
-									>
-								<TextBlock
-										Text="font size"
-										TextWrapping="Wrap"
-										/>
-							</Label>
-							<Label Content="{Binding FieldFont.FontSize}"
-									Grid.Row="3"
-									Grid.Column="2"
-									Style="{StaticResource RowDetailLabel}"
+						<Label
+								Grid.Row="2"
+								Grid.Column="2"
+								Style="{StaticResource RowDetailLabel}"
+								>
+							<TextBlock
+									Text="font size"
+									TextWrapping="Wrap"
 									/>
+						</Label>
+						<Label Content="{Binding FieldFont.FontSize}"
+								Grid.Row="3"
+								Grid.Column="2"
+								Style="{StaticResource RowDetailLabel}"
+								/>
 
-							<Label
-									Grid.Row="2"
-									Grid.Column="3"
-									Style="{StaticResource RowDetailLabel}"
-									>
-								<TextBlock
-										Text="font stretch"
-										TextWrapping="Wrap"
-										/>
-							</Label>
-							<Label Content="{Binding FieldFont.FontStretch}"
-									Grid.Row="3"
-									Grid.Column="3"
-									Style="{StaticResource RowDetailLabel}"
+						<Label
+								Grid.Row="2"
+								Grid.Column="3"
+								Style="{StaticResource RowDetailLabel}"
+								>
+							<TextBlock
+									Text="font stretch"
+									TextWrapping="Wrap"
 									/>
+						</Label>
+						<Label Content="{Binding FieldFont.FontStretch}"
+								Grid.Row="3"
+								Grid.Column="3"
+								Style="{StaticResource RowDetailLabel}"
+								/>
 
-							<Label
-									Grid.Row="2"
-									Grid.Column="4"
-									Style="{StaticResource RowDetailLabel}"
-									>
-								<TextBlock
-										Text="font style"
-										TextWrapping="Wrap"
-										/>
-							</Label>
-							<Label Content="{Binding FieldFont.FontStyle}"
-									Grid.Row="3"
-									Grid.Column="4"
-									Style="{StaticResource RowDetailLabel}"
+						<Label
+								Grid.Row="2"
+								Grid.Column="4"
+								Style="{StaticResource RowDetailLabel}"
+								>
+							<TextBlock
+									Text="font style"
+									TextWrapping="Wrap"
 									/>
+						</Label>
+						<Label Content="{Binding FieldFont.FontStyle}"
+								Grid.Row="3"
+								Grid.Column="4"
+								Style="{StaticResource RowDetailLabel}"
+								/>
 
-							<Label
-									Grid.Row="2"
-									Grid.Column="5"
-									Style="{StaticResource RowDetailLabel}"
-									>
-								<TextBlock
-										Text="font weight"
-										TextWrapping="Wrap"
-										/>
-							</Label>
-							<Label Content="{Binding FieldFont.FontWeight}"
-									Grid.Row="3"
-									Grid.Column="5"
-									Style="{StaticResource RowDetailLabel}"
+						<Label
+								Grid.Row="2"
+								Grid.Column="5"
+								Style="{StaticResource RowDetailLabel}"
+								>
+							<TextBlock
+									Text="font weight"
+									TextWrapping="Wrap"
 									/>
+						</Label>
+						<Label Content="{Binding FieldFont.FontWeight}"
+								Grid.Row="3"
+								Grid.Column="5"
+								Style="{StaticResource RowDetailLabel}"
+								/>
 
-							<Label
-									Grid.Row="2"
-									Grid.Column="6"
-									Style="{StaticResource RowDetailLabel}"
-									>
-								<TextBlock
-										Text="foreground"
-										TextWrapping="Wrap"
-										/>
-							</Label>
-							<Label Content="{Binding FieldFont.Foreground}"
-									Grid.Row="3"
-									Grid.Column="6"
-									Style="{StaticResource RowDetailLabel}"
+						<Label
+								Grid.Row="2"
+								Grid.Column="6"
+								Style="{StaticResource RowDetailLabel}"
+								>
+							<TextBlock
+									Text="foreground"
+									TextWrapping="Wrap"
 									/>
+						</Label>
+						<Label Content="{Binding FieldFont.Foreground}"
+								Grid.Row="3"
+								Grid.Column="6"
+								Style="{StaticResource RowDetailLabel}"
+								/>
 
-						</Grid>
-					</DataTemplate>
-				</DataGrid.RowDetailsTemplate>
-			</DataGrid>
-		</Grid>
-
+					</Grid>
+				</DataTemplate>
+			</DataGrid.RowDetailsTemplate>
+		</DataGrid>
 
 		<!--#region > Datagrid 2-->
 
@@ -1000,7 +1090,7 @@
 
 
 		<Label Name="py" Content="{Binding Fm.Cd.FamilyName}"
-				Grid.Row="3"
+				Grid.Row="4"
 				Grid.Column="1"
 				VerticalAlignment="Top"
 				FontSize="10"
@@ -1015,6 +1105,8 @@
 				Margin="0,0,0,10"
 				HorizontalAlignment="Stretch"
 				VerticalAlignment="Stretch"
+				d:DataContext="{d:DesignInstance Type=local:MainWindow,
+																				 IsDesignTimeCreatable=True}"
 				AreRowDetailsFrozen="False"
 				AutoGenerateColumns="False"
 				CanUserAddRows="{Binding Fm.CanUserAddRows}"
@@ -1022,13 +1114,24 @@
 				ColumnWidth="Auto"
 				HeadersVisibility="All"
 				HorizontalScrollBarVisibility="Visible"
+				RowHeaderStyle="{DynamicResource DataGridRowHeaderStyle1}"
+				RowHeaderTemplate="{DynamicResource RowHeaderTemplate1}"
 				VerticalScrollBarVisibility="Visible"
 				ItemsSource="{Binding Fm.Fd}"
-				/>
+				>
+			<DataGrid.Columns>
+				<DataGridTextColumn
+						Binding="{Binding ParameterValues[0].ParamValue}"
+						Header="{Binding Fm.Cd.ColumnSpecs[0]}"
+						HeaderStyle="{StaticResource DataGridColumnHeaderStyle3}"
 
+						>
+					
+					
+				</DataGridTextColumn>
+			</DataGrid.Columns>
+		</DataGrid>
 
-		<!--  ItemsSource="{Binding}"  -->
-		<!--  ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle2}"  -->
 
 		<!--#endregion-->
 

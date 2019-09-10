@@ -42,6 +42,7 @@ namespace ParameterVue
 			
 			Fm.LoadFamilies();
 
+			dataGrid2.ItemsSource = Fm.Fd;
 			dataGrid3.ItemsSource = Fm.Fd;
 			dataGrid4.ItemsSource = Fm.Cd.ColumnSpecs;
 
@@ -166,11 +167,13 @@ namespace ParameterVue
 
 			ConfigureDataGrid(dataGrid2, Fm);
 
-			b = CreateBinding2("Selected", false, BindingMode.TwoWay);
-			AddColumn(this, dataGrid2, Fm.Cd.Selected, b);
+//			b = CreateBinding2("Selected", false, BindingMode.TwoWay);
+//			AddColumn(this, dataGrid2, Fm.Cd.Selected, b);
+//
+//			b = CreateBinding2("FamilyName", "none", BindingMode.OneWay);
+//			AddColumn(this, dataGrid2, Fm.Cd.FamilyName, b);
 
-			b = CreateBinding2("FamilyName", "none", BindingMode.OneWay);
-			AddColumn(this, dataGrid2, Fm.Cd.FamilyName, b);
+			dataGrid2.Columns.Clear();
 
 			int position = 0;
 			string path;

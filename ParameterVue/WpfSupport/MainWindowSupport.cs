@@ -49,11 +49,6 @@ namespace ParameterVue.WpfSupport
 
 		}
 
-		public static void AddColumns(FamilyMgr Fm)
-		{
-
-		}
-
 		public static void AddColumn(Window w, DataGrid dg, ColumnSpec cs, Binding b)
 		{
 			DataGridColumn col = null;
@@ -81,12 +76,15 @@ namespace ParameterVue.WpfSupport
 				}
 			}
 
-			DataTemplate dt = (DataTemplate) w.FindResource("HeaderTemplate1");
+//			DataTemplate dt = (DataTemplate) w.FindResource("HeaderTemplate1");
+			Style dt = (Style) w.FindResource("DataGridColumnHeaderStyle3");
 
 			if (cs.ColumnWidth > 0) col.Width = cs.ColumnWidth;
 
 			col.Header = cs;
-			col.HeaderTemplate = dt;
+//			col.HeaderTemplate = dt;
+			col.HeaderStyle = dt;
+			
 
 			dg.Columns.Add(col);
 
