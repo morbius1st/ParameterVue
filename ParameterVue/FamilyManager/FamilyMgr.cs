@@ -34,6 +34,7 @@ namespace ParameterVue.FamilyManager
 		{
 		#if DEBUG
 			FamilyMgrSupport.LoadDesignData(Fd, Cd);
+
 		#endif
 		}
 

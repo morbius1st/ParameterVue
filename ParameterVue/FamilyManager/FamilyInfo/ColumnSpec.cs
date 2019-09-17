@@ -188,10 +188,10 @@ namespace ParameterVue.FamilyManager.FamilyInfo
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName));
 		}
 
-		public override string ToString()
-		{
-			return ColumnTitle;
-		}
+//		public override string ToString()
+//		{
+//			return ColumnTitle;
+//		}
 
 		public string DivideStringByMaxLength(string s, int maxLength)
 		{

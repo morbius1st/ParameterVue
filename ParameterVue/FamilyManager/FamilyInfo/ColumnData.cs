@@ -30,6 +30,13 @@ namespace ParameterVue.FamilyManager.FamilyInfo
 
 			SetSelected();
 			SetFamilyName();
+
+			Parameter p = new Parameter();
+			p.Definition = new InternalDefinition();
+			p.Definition.Name = "Column Title";
+
+			ColumnSpec cs = new ColumnSpec(0, p);
+			ColumnSpecs.Add(cs);
 		}
 
 		public static ColumnSpec SelectedColSpec()
@@ -57,12 +64,12 @@ namespace ParameterVue.FamilyManager.FamilyInfo
 
 		private void SetSelected()
 		{
-			Selected = new ColumnSpec(0, TestData.DefineParameter("none", "Selected", "string", "YesNo", "none", "none"));
+			Selected = new ColumnSpec(0, TestData.DefineParameter("Selected", "Selected", "string", "YesNo", "none", "none"));
 		}
 
 		private void SetFamilyName()
 		{
-			FamilyName = new ColumnSpec(1, TestData.DefineParameter("none", "Family Name", "string", "Text", "none", "none"));
+			FamilyName = new ColumnSpec(1, TestData.DefineParameter("Family Name", "Family Name", "string", "Text", "none", "none"));
 		}
 	}
 }

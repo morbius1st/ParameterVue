@@ -3,6 +3,8 @@
 // File:             CustomProperties.cs
 // Created:      -- ()
 
+using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
 
@@ -13,6 +15,10 @@ namespace ParameterVue.WpfSupport.CustomXAMLProperties
 	{
 		public static readonly DependencyProperty GenericBoolOneProperty = DependencyProperty.RegisterAttached(
 			"GenericBoolOne", typeof(bool), typeof(CustomProperties),
+			new PropertyMetadata(false));
+		
+		public static readonly DependencyProperty GenericBoolTwoProperty = DependencyProperty.RegisterAttached(
+			"GenericBoolTwo", typeof(bool), typeof(CustomProperties),
 			new PropertyMetadata(false));
 
 		public static readonly DependencyProperty GenericFontProperty = DependencyProperty.RegisterAttached(
@@ -27,6 +33,19 @@ namespace ParameterVue.WpfSupport.CustomXAMLProperties
 			"ErrorFlag", typeof(bool), typeof(CustomProperties),
 			new PropertyMetadata(false));
 
+		public static readonly DependencyProperty DataGridCellRowProperty = DependencyProperty.RegisterAttached(
+			"DataGridCellRow", typeof(Int32), typeof(CustomProperties),
+			new PropertyMetadata(0));
+		
+		public static readonly DependencyProperty DataGridCellColumnProperty = DependencyProperty.RegisterAttached(
+			"DataGridCellColumn", typeof(Int32), typeof(CustomProperties),
+			new PropertyMetadata(0));
+
+		public static readonly DependencyProperty ColumnReorderingProperty = DependencyProperty.RegisterAttached(
+			"ColumnReordering", typeof(bool), typeof(CustomProperties),
+			new PropertyMetadata(false));
+
+
 	#region GenericBoolOne
 
 		public static void SetGenericBoolOne(UIElement e, bool value)
@@ -37,6 +56,22 @@ namespace ParameterVue.WpfSupport.CustomXAMLProperties
 		public static bool GetGenericBoolOne(UIElement e)
 		{
 			return (bool) e.GetValue(GenericBoolOneProperty);
+		}
+
+	#endregion
+		
+	#region GenericBoolTwo
+
+		public static void SetGenericBoolTwo(UIElement e, bool value)
+		{
+			Debug.WriteLine("SetGenericBoolTwo| " + value);
+			e.SetValue(GenericBoolTwoProperty, value);
+		}
+
+		public static bool GetGenericBoolTwo(UIElement e)
+		{
+			Debug.WriteLine("GetGenericBoolTwo| ");
+			return (bool) e.GetValue(GenericBoolTwoProperty);
 		}
 
 	#endregion
@@ -82,6 +117,51 @@ namespace ParameterVue.WpfSupport.CustomXAMLProperties
 		}
 
 	#endregion
+
+	#region DataGridCellRow
+
+		public static void SetDataGridCellRow(UIElement e, Int32 value)
+		{
+			e.SetValue(DataGridCellRowProperty, value);
+		}
+
+		public static Int32 GetDataGridCellRow(UIElement e)
+		{
+			return (Int32) e.GetValue(DataGridCellRowProperty);
+		}
+
+	#endregion
+
+	#region DataGridCellColumn
+
+		public static void SetDataGridCellColumn(UIElement e, Int32 value)
+		{
+			e.SetValue(DataGridCellColumnProperty, value);
+		}
+
+		public static Int32 GetDataGridCellColumn(UIElement e)
+		{
+			return (Int32) e.GetValue(DataGridCellColumnProperty);
+		}
+
+	#endregion
+
+	#region ColumnReordering
+
+		public static void SetColumnReordering(UIElement e, bool value)
+		{
+			Debug.WriteLine("SetColumnReordering| " + value);
+			e.SetValue(ColumnReorderingProperty, value);
+		}
+
+		public static bool GetColumnReordering(UIElement e)
+		{
+			Debug.WriteLine("GetColumnReordering");
+			return (bool) e.GetValue(ColumnReorderingProperty);
+		}
+
+	#endregion
+
 
 	}
 }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -12,6 +14,7 @@ using ParameterVue.FamilyManager;
 using ParameterVue.FamilyManager.FamilyInfo;
 using ParameterVue.FamilyManager.Support;
 using ParameterVue.WpfSupport;
+using ParameterVue.WpfSupport.CustomXAMLProperties;
 using static ParameterVue.WpfSupport.MainWindowSupport;
 using static ParameterVue.WpfSupport.ConfigurationSettings;
 
@@ -21,7 +24,7 @@ namespace ParameterVue
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window
+	public partial class MainWindow : Window, INotifyPropertyChanged
 	{
 		public static string ColHeaderTbkStyleName { get; set; } = "ColHeaderTbk";
 		public static string RowHeaderTbxStyleName { get; set; } = "RowHeaderTbx";
@@ -32,15 +35,17 @@ namespace ParameterVue
 		public static TextBlock tx;
 		private int count = 0;
 
+		
+
 		public static ConfigurationSettings lbc { get;  set; } = new ConfigurationSettings();
 
-		public FamilyMgr Fm { get; set; } = new FamilyManager.FamilyMgr();
+		public FamilyMgr Fm { get; set; } = new FamilyMgr();
 
 		public MainWindow()
 		{
 			InitializeComponent(); 
-			
-			Fm.LoadFamilies();
+
+//			Fm.LoadFamilies();
 
 			dataGrid2.ItemsSource = Fm.Fd;
 			dataGrid3.ItemsSource = Fm.Fd;
@@ -49,16 +54,56 @@ namespace ParameterVue
 			tx = textBlock;
 		}
 
+		private int i = 100;
+
+		public int testInt
+		{
+			get
+			{
+				Debug.WriteLine("get testInt|");
+				
+				return i;
+			}
+			set
+			{ 
+				i = value;
+				OnPropertyChange();
+			}
+		}
+
+		public bool EventWatcher
+		{
+			get
+			{
+				Debug.WriteLine("EventWatcher| get");
+				return true;
+
+			}
+			set
+			{
+				Debug.WriteLine("EventWatcher| set| " + value);
+			}
+		}
+
+
 		private void Button_Debug(object sender, RoutedEventArgs e)
 		{
+
+			testInt++;
+
 			Debug.WriteLine("At button Debug");
+
+			
 		}
 
 
 	#region DataGrid 2
+
 		private void Button_Test21(object sender, RoutedEventArgs e)
 		{
 			Debug.WriteLine("At button Test 21");
+
+			dataGrid2.Columns.Clear();
 
 			LoadHeaderData();
 
@@ -137,6 +182,8 @@ namespace ParameterVue
 		{
 			Debug.WriteLine("At button Test 22");
 
+			dataGrid2.Columns.Clear();
+
 			LoadHeaderData();
 
 			LoadDataToDg1s();
@@ -161,6 +208,8 @@ namespace ParameterVue
 		{
 			Debug.WriteLine("At button Test 23");
 
+			dataGrid2.Columns.Clear();
+
 			// load the parameter information into
 			// Fm & Cd
 			Binding b;
@@ -173,7 +222,7 @@ namespace ParameterVue
 //			b = CreateBinding2("FamilyName", "none", BindingMode.OneWay);
 //			AddColumn(this, dataGrid2, Fm.Cd.FamilyName, b);
 
-			dataGrid2.Columns.Clear();
+			
 
 			int position = 0;
 			string path;
@@ -573,6 +622,14 @@ namespace ParameterVue
 			}
 		}
 
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		private void OnPropertyChange([CallerMemberName] string memberName = "")
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName));
+		}
+
 	#endregion
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -580,20 +637,10 @@ namespace ParameterVue
 			AddColumnAndData(Fm.Cd.ColumnSpecs[0], 0, 100);
 			AddColumnAndData(Fm.Cd.ColumnSpecs[1], 1, 100);
 			AddColumnAndData(Fm.Cd.ColumnSpecs[2], 2, 100);
-			AddColumnAndData(Fm.Cd.ColumnSpecs[3], 3, 100);
+//			AddColumnAndData(Fm.Cd.ColumnSpecs[3], 3, 100);
 
         }
 
-		private void DataGrid1_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
-		{
-//			if (e.PropertyName == col22) { e.Cancel = true; }
-
-		}
-
-		private void DataGrid1_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-
-		}
 
 		private void DataGrid4_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
 		{
@@ -610,6 +657,7 @@ namespace ParameterVue
 				e.Cancel = true;
 			}
 		}
+
 	}
 
 	public class HeaderInfo

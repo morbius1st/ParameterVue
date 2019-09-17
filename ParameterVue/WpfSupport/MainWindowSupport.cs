@@ -1,5 +1,6 @@
 ﻿#region + Using Directives
 
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.CompilerServices;
@@ -24,6 +25,63 @@ using ParameterVue.WpfSupport.CustomXAMLProperties;
 
 namespace ParameterVue.WpfSupport
 {
+
+	public class DataGridCs : DataGrid, INotifyPropertyChanged
+	{
+		private bool customBoolProperty = true;
+
+		public bool CustomBoolProperty
+		{
+			get => customBoolProperty;
+			set
+			{ customBoolProperty = value;
+			OnPropertyChange();
+			}
+		}
+
+		private int customIntProperty = -1;
+
+		public  int CustomIntProperty
+		{
+			get => customIntProperty;
+			set
+			{
+				customIntProperty = value;
+				OnPropertyChange();
+			}
+		}
+
+		public DataGridCs()
+		{
+			ColumnReordering += OnColumnReordering;
+			ColumnReordered += OnColumnReordered;
+		}
+
+		private void OnColumnReordering(object sender, DataGridColumnReorderingEventArgs e)
+		{
+			Debug.WriteLine("reordering");
+			CustomBoolProperty = true;
+			customIntProperty += 1;
+		}
+
+		private void OnColumnReordered(object sender, DataGridColumnEventArgs e)
+		{
+			Debug.WriteLine("reordered");
+			CustomBoolProperty = false;
+
+			customIntProperty += 2;
+
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		private void OnPropertyChange([CallerMemberName] string memberName = "")
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName));
+		}
+	}
+
+
 	// the process for adding a new column to the listbox
 	// find the (2) grids and confirm that each is the same length
 	// add the header item to the grid previously found
@@ -31,9 +89,6 @@ namespace ParameterVue.WpfSupport
 	// for each listboxitem in the listbox
 	//   find the "data" grid
 	//   add the control and bind to the data
-	
-
-
 	public class MainWindowSupport
 	{
 
