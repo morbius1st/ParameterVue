@@ -39,7 +39,7 @@ namespace ParameterVue.FamilyManager
 		}
 
 		// overall datagrid properties
-		public bool CanUserAddRows { get; set; } = true;
+		public bool CanUserAddRows { get; set; } = false;
 		public bool CanUserDeleteRows { get; set; } = true;
 		public bool CanUserAddColumns { get; set; } = false;
 		public bool CanUserDeleteColumns { get; set; } = false;

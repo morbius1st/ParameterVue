@@ -35,7 +35,20 @@ namespace ParameterVue
 		public static TextBlock tx;
 		private int count = 0;
 
-		
+		private int test1 = 10;
+
+		private bool updateColumn;
+
+		public bool UpdateColumn
+		{
+			get => updateColumn;
+			set
+			{ 
+				updateColumn = value;
+				OnPropertyChange();
+			}
+		}
+
 
 		public static ConfigurationSettings lbc { get;  set; } = new ConfigurationSettings();
 
@@ -54,46 +67,9 @@ namespace ParameterVue
 			tx = textBlock;
 		}
 
-		private int i = 100;
-
-		public int testInt
-		{
-			get
-			{
-				Debug.WriteLine("get testInt|");
-				
-				return i;
-			}
-			set
-			{ 
-				i = value;
-				OnPropertyChange();
-			}
-		}
-
-		public bool EventWatcher
-		{
-			get
-			{
-				Debug.WriteLine("EventWatcher| get");
-				return true;
-
-			}
-			set
-			{
-				Debug.WriteLine("EventWatcher| set| " + value);
-			}
-		}
-
-
 		private void Button_Debug(object sender, RoutedEventArgs e)
 		{
-
-			testInt++;
-
 			Debug.WriteLine("At button Debug");
-
-			
 		}
 
 
@@ -447,56 +423,20 @@ namespace ParameterVue
 			public string parameter3_x { get; set; }
 		}
 
-
-//		public ObservableCollection<Font> fts { get; set; } = new ObservableCollection<Font>();
-
-
 		private void Button_Test12(object sender, RoutedEventArgs e)
 		{
 			FontStretch s = FontStretches.Normal;
 			dataGrid1.DataContext = null;
 
-//			fts.Add(new Font("Arial", 12.0, FontStyles.Normal, FontWeights.Black));
-//			fts.Add(new Font("Cooper Black", 10.0, FontStyles.Italic, FontWeights.Normal));
-
 			Debug.WriteLine("At button Test 12");
 
 			HeaderInfo h;
-
-//			for (int i = 0; i < 4; i++)
-//			{
-//				if ((i % 2) == 0)
-//				{
-//					h = new HeaderInfo("col_A_" + i, Header2Font, 100);
-//				}
-//				else
-//				{
-//					h = new HeaderInfo("col_B_" + i, Header3Font, 60);
-//				}
-//
-//				Hi.Add(h);
-//			}
 
 			LoadHeaderData();
 
 			LoadDataToDg1s();
 
 			dataGrid1.ItemsSource = Dg1s;
-
-//			int k = 0;
-//
-//			foreach (DataGridColumn col in dataGrid1.Columns)
-//			{
-//
-//				if ((k % 2)==0)
-//				{
-//					col.Header = new HeaderInfo("col_A_" + k++, Header2Font, 70);
-//				}
-//				else
-//				{
-//					col.Header = new HeaderInfo("col_B_" + k++, Header3Font, 50);
-//				}
-//			}
 
 		}
 
@@ -637,8 +577,6 @@ namespace ParameterVue
 			AddColumnAndData(Fm.Cd.ColumnSpecs[0], 0, 100);
 			AddColumnAndData(Fm.Cd.ColumnSpecs[1], 1, 100);
 			AddColumnAndData(Fm.Cd.ColumnSpecs[2], 2, 100);
-//			AddColumnAndData(Fm.Cd.ColumnSpecs[3], 3, 100);
-
         }
 
 
@@ -658,6 +596,10 @@ namespace ParameterVue
 			}
 		}
 
+		private void DataGrid2_OnColumnReordered(object sender, DataGridColumnEventArgs e)
+		{
+			UpdateColumn = !updateColumn;
+		}
 	}
 
 	public class HeaderInfo

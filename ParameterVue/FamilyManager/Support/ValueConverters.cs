@@ -42,8 +42,6 @@ namespace ParameterVue.FamilyManager.Support
 
 	public class RowToIndexConverter : IValueConverter
 	{
-//		static RowToIndexConverter converter;
-
 		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 		{
 			DataGridRow row = value as DataGridRow;
@@ -57,52 +55,31 @@ namespace ParameterVue.FamilyManager.Support
 		{
 			throw new NotImplementedException();
 		}
-
-		//		public override object ProvideValue(IServiceProvider serviceProvider)
-		//		{
-		//			if (converter == null) converter = new RowToIndexConverter();
-		//			return converter;
-		//		}
-
-		//		public RowToIndexConverter() { }
 	}
 
-	public class CellColToIndexConverter : IValueConverter
+	public class CellColToIndexConverter : IMultiValueConverter
 	{
-//		static CellColToIndexConverter converter;
+		public object Convert(object[] value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		{ 
+			if (!(value[1] is DataGridCell))
+			{
+				return "";
+			}
 
-		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-		{
-			DataGridCell cell = value as DataGridCell;
+			DataGridCell cell = (DataGridCell) value[1];
 
-			if (cell == null)
-				return -1;
-//
-////			DataGridCellInfo info = new DataGridCellInfo(cell);
-//
-//
-//			DataGridCellsPanel p = (DataGridCellsPanel) VisualTreeHelper.GetParent(cell);
-//
-//			if (p == null)
-//				return -1;
-//
-//			int i = p.Children.IndexOf(cell);
-
-			Debug.WriteLine("converting| " + cell.Column.DisplayIndex);
-
-			return cell.Column.DisplayIndex;
+			return cell.Column.DisplayIndex.ToString();
 		}
 
-		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		public object[] ConvertBack(object value, Type[] targetType, object parameter, System.Globalization.CultureInfo culture)
 		{
 			throw new NotImplementedException();
 		}
+
 	}
 
 	public class CellRowToIndexConverter : IValueConverter
 	{
-//		static CellRowToIndexConverter converter;
-
 		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 		{
 
@@ -116,21 +93,26 @@ namespace ParameterVue.FamilyManager.Support
 
 		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 		{
-			throw new NotImplementedException();
+			int v;
+
+			if (int.TryParse((string) value, out v))
+				return v;
+
+			return -1;
 		}
 
 	}
 
+
 	public class TestConverter : IValueConverter
 	{
-//		static CellRowToIndexConverter converter;
-
 		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 		{
+			Debug.WriteLine("at test convert");
 
-			Debug.WriteLine("converting| Test");
-
-			return -1;
+			Type t = value.GetType();
+			
+			return "";
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

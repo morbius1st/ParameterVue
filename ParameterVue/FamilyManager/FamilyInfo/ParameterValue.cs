@@ -1,7 +1,9 @@
 ﻿#region + Using Directives
 
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Windows.Controls;
 using Autodesk.Revit.DB;
 
 #endregion
@@ -22,6 +24,9 @@ namespace ParameterVue.FamilyManager.FamilyInfo
 		private string paramOrigValue;
 		private bool revised;
 		private bool invalid;
+		private int row;
+		private int col;
+		private DataGridCell cell;
 
 		private Parameter parameter;
 
@@ -69,17 +74,17 @@ namespace ParameterVue.FamilyManager.FamilyInfo
 		public string ParamOrigValue
 		{
 			get => paramOrigValue;
-//			private set
-//			{
-//				if (!value.Equals(paramOrigValue))
-//				{
-//					paramOrigValue = value;
-//
+			private set
+			{
+				if (!value.Equals(paramOrigValue))
+				{
+					paramOrigValue = value;
+
 //					updateRevised();
-//
-//					OnPropertyChange();
-//				}
-//			}
+
+					OnPropertyChange();
+				}
+			}
 		}
 
 		public bool Revised
@@ -101,6 +106,36 @@ namespace ParameterVue.FamilyManager.FamilyInfo
 			set
 			{
 				invalid = value;
+				OnPropertyChange();
+			}
+		}
+
+		public DataGridCell Cell
+		{
+			private get => cell;
+			set
+			{
+				Debug.WriteLine("at cell| ");
+				cell = value;
+			}
+		}
+
+		public int Row
+		{
+			get => row;
+			set
+			{
+				row = value;
+				OnPropertyChange();
+			}
+		}
+
+		public int Col
+		{
+			get => col;
+			set
+			{
+				col = value;
 				OnPropertyChange();
 			}
 		}

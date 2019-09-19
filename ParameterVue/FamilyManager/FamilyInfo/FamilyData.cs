@@ -30,5 +30,12 @@ namespace ParameterVue.FamilyManager.FamilyInfo
 			ParameterValues = new ObservableCollection<ParameterValue>();
 		}
 
+		public FamilyData() { }
+
+		public int TestMethod(int test)
+		{
+			return test + 2;
+		}
+
 	}
 }

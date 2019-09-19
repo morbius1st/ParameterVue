@@ -25,10 +25,6 @@
 				>
 			Cooper Black
 		</FontFamily>
-		<sys:Int32 x:Key="rowcol"
-				>
-			1
-		</sys:Int32>
 		<sys:Double x:Key="FontSize"
 				>
 			10
@@ -49,13 +45,12 @@
 				/>
 		<support1:RowToIndexConverter x:Key="RowToIndexConverter"
 				/>
-		<support1:CellColToIndexConverter x:Key="CellColToIndexConverter"
+		<support1:CellColToIndexConverter x:Key="CellColToIndex"
 				/>
-		<support1:CellRowToIndexConverter x:Key="CellRowToIndexConverter"
+		<support1:CellRowToIndexConverter x:Key="CellRowToIndex"
 				/>
 		<support1:TestConverter x:Key="TestConverter"
 				/>
-
 
 		<Style x:Key="RowDetailLabel"
 				TargetType="Label"
@@ -80,44 +75,6 @@
 			<Setter Property="Padding" Value="2,4,2,4" />
 			<Setter Property="TextWrapping" Value="Wrap" />
 			<Setter Property="VerticalAlignment" Value="Bottom" />
-		</Style>
-
-		<Style x:Key="sx"
-				TargetType="{x:Type TextBlock}"
-				>
-			<Setter Property="FontFamily" Value="{Binding (cp:CustomProperties.GenericFont).FontFamily, FallbackValue={StaticResource FontFamily}, Mode=OneWay, RelativeSource={RelativeSource Self}}" />
-			<Setter Property="FontSize" Value="{Binding (cp:CustomProperties.GenericFont).FontSize, FallbackValue={StaticResource FontSize}, Mode=OneWay, RelativeSource={RelativeSource Self}}" />
-		</Style>
-
-		<Style x:Key="stx"
-				TargetType="{x:Type DataGridColumnHeader}"
-				>
-			<!-- <Setter Property="FontFamily" Value="{Binding Source={StaticResource Font1}, Path=FontFamily}" /> -->
-			<!-- <Setter Property="FontSize" Value="{Binding ElementName=mainWindow, Path=fts[1].FontSize}"/> -->
-			<!--    -->
-			<!-- <Setter Property="FontStretch" Value="{Binding RelativeSource={RelativeSource Self}, Path=(cp:CustomProperties.GenericFont).FontStretch, Mode=OneWay, FallbackValue={StaticResource FontStretch}}" /> -->
-			<!-- <Setter Property="FontStyle" Value="{Binding ElementName=mainWindow, Path=lbc.HeaderFont.FontStyle, Mode=OneWay}" /> -->
-			<!-- <Setter Property="FontWeight" Value="{Binding ElementName=mainWindow, Path=lbc.HeaderFont.FontWeight, Mode=OneWay}" /> -->
-			<!-- <Setter Property="Foreground" Value="{Binding ElementName=mainWindow, Path=lbc.HeaderFont.Foreground, Mode=OneWay}" /> -->
-			<Setter Property="MaxWidth" Value="50" />
-			<Setter Property="Padding" Value="2,4,2,4" />
-
-			<Setter Property="Template">
-				<Setter.Value>
-					<ControlTemplate>
-						<TextBlock x:Name="tblk1x"
-								cp:CustomProperties.GenericFont="{Binding fts[0], ElementName=mainWindow}"
-								Text="{Binding}"
-								TextWrapping="Wrap"
-								Style="{StaticResource sx}"
-								/>
-					</ControlTemplate>
-				</Setter.Value>
-
-			</Setter>
-			<Setter Property="VerticalAlignment" Value="Bottom" />
-
-
 		</Style>
 
 		<Style x:Key="ColHeaderSymb"
@@ -344,16 +301,9 @@
 			</Grid>
 		</DataTemplate>
 
-		<Style x:Key="ColHdrStyle"
-				TargetType="DataGridColumnHeader"
-				>
-			<Setter Property="cp:CustomProperties.DataGridCellColumn" Value="10" />
-
-		</Style>
 
 		<Style x:Key="DataGridColumnHeaderStyle3"
 				TargetType="{x:Type DataGridColumnHeader}"
-				BasedOn="{StaticResource ColHdrStyle}"
 				>
 			<Setter Property="ContentTemplate" Value="{DynamicResource HeaderTemplate1}" />
 			<Setter Property="Margin" Value="3,1,3,1" />
@@ -483,9 +433,7 @@
 		<Style x:Key="DataGridRowHeaderStyle1"
 				TargetType="{x:Type DataGridRowHeader}"
 				>
-
 			<Setter Property="ContentTemplate" Value="{DynamicResource RowHeaderTemplate1}" />
-
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate
@@ -536,7 +484,6 @@
 		</Style>
 
 
-		<!--  "{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridRow}}, Path=DataContext}"  -->
 		<DataTemplate x:Key="RowHeaderTemplate1"
 				DataType="{x:Type familyInfo:FamilyData}"
 				>
@@ -550,11 +497,11 @@
 					<ColumnDefinition Width="30" />
 					<ColumnDefinition Width="60" />
 				</Grid.ColumnDefinitions>
-				<!--  <TextBlock  -->
-				<!--  Grid.Column="0"  -->
-				<!--  Text="{Binding Converter={StaticResource RowToIndexConverter}}"  -->
-				<!--  Foreground="Black"  -->
-				<!--  />  -->
+				<TextBlock
+						Grid.Column="0"
+						Text="{Binding Converter={StaticResource RowToIndexConverter}}"
+						Foreground="Black"
+						/>
 				<CheckBox
 						Grid.Column="1"
 						IsChecked="{Binding Item.Selected, FallbackValue='true', Mode=TwoWay}"
@@ -593,17 +540,116 @@
 					</ControlTemplate>
 				</Setter.Value>
 			</Setter>
-			<Setter Property="cp:CustomProperties.DataGridCellColumn" Value="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource CellColToIndexConverter}, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" />
-			<Setter Property="cp:CustomProperties.DataGridCellRow" Value="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource CellRowToIndexConverter}}" />
 			<Style.Triggers>
-				<DataTrigger
-						Binding="{Binding ElementName=dataGrid2, Path=CustomBoolProperty}"
-						Value="true"
-						>
-					<Setter Property="cp:CustomProperties.GenericBoolOne" Value="true" />
-				</DataTrigger>
+				<Trigger Property="IsSelected" Value="True">
+					<Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+					<Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+					<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+				</Trigger>
+				<Trigger Property="IsKeyboardFocusWithin" Value="True">
+					<Setter Property="BorderBrush" Value="{DynamicResource {x:Static DataGrid.FocusBorderBrushKey}}" />
+				</Trigger>
+				<MultiTrigger>
+					<MultiTrigger.Conditions>
+						<Condition Property="IsSelected" Value="true" />
+						<Condition Property="Selector.IsSelectionActive" Value="false" />
+					</MultiTrigger.Conditions>
+					<Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}" />
+					<Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}" />
+					<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}}" />
+				</MultiTrigger>
+				<Trigger Property="IsEnabled" Value="false">
+					<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+				</Trigger>
+			</Style.Triggers>
+		</Style>
 
+		<DataTemplate x:Key="DataGrid2CellTemplate1"
+				DataType="{x:Type familyInfo:FamilyData}"
+				>
+			<Grid>
+				<StackPanel>
+					<TextBlock Name="Cell2Blk1"
+							Margin="3,0,3,0"
+							Width="60"
+							VerticalAlignment="Bottom"
+							Text="{Binding Path=ParameterValues/ParamValue}"
+							TextWrapping="Wrap"
+							/>
+					<!--  Text="{Binding Path=ParameterValues/ParamValue, Converter={StaticResource TestConverter}}"  -->
+					<!--  <StackPanel  -->
+					<!--  Orientation="Horizontal"  -->
+					<!--  >  -->
+					<!--    -->
+					<!--  <TextBlock Name="Cell2BlkCol"  -->
+					<!--  Margin="3,0,3,0"  -->
+					<!--  Width="30"  -->
+					<!--  HorizontalAlignment="Center"  -->
+					<!--  VerticalAlignment="Center"  -->
+					<!--  cp:CustomProperties.GenericObjectOne="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridCell}}}"  -->
+					<!--  Tag="{Binding UpdateColumn, ElementName=mainWindow}"  -->
+					<!--  TextAlignment="Center"  -->
+					<!--  TextWrapping="Wrap"  -->
+					<!--  >  -->
+					<!-- 		<TextBlock.Text> -->
+					<!--  <MultiBinding  -->
+					<!--  Converter="{StaticResource CellColToIndex}"  -->
+					<!--  Mode="OneWay"  -->
+					<!--  >  -->
+					<!--  <Binding  -->
+					<!--  Path="Tag"  -->
+					<!--  RelativeSource="{RelativeSource Self}"  -->
+					<!--  />  -->
+					<!--  <Binding  -->
+					<!--  Path="(cp:CustomProperties.GenericObjectOne)"  -->
+					<!--  RelativeSource="{RelativeSource Self}"  -->
+					<!--  />  -->
+					<!-- 			</MultiBinding> -->
+					<!-- 		</TextBlock.Text> -->
+					<!--    -->
+					<!-- 	</TextBlock> -->
+					<!--    -->
+					<!--  <TextBlock Name="Cell2BlkRow"  -->
+					<!--  Margin="3,0,3,0"  -->
+					<!--  Width="30"  -->
+					<!--  HorizontalAlignment="Center"  -->
+					<!--  VerticalAlignment="Center"  -->
+					<!--  cp:CustomProperties.GenericObjectOne="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridCell}}}"  -->
+					<!--  Text="{Binding Path=(cp:CustomProperties.GenericObjectOne), RelativeSource={RelativeSource Self}, Converter={StaticResource CellRowToIndex}, Mode=TwoWay}"  -->
+					<!--  TextAlignment="Center"  -->
+					<!--  TextWrapping="Wrap"  -->
+					<!--  />  -->
+					<!-- </StackPanel> -->
+				</StackPanel>
+			</Grid>
+		</DataTemplate>
 
+		<Style x:Key="DataGridCellStyle2"
+				TargetType="{x:Type DataGridCell}"
+				>
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="BorderBrush" Value="Transparent" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="ContentTemplate" Value="{DynamicResource DataGrid2CellTemplate2}" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate
+							TargetType="{x:Type DataGridCell}"
+							>
+						<Border
+								SnapsToDevicePixels="True"
+								Background="{TemplateBinding Background}"
+								BorderThickness="{TemplateBinding BorderThickness}"
+								BorderBrush="{TemplateBinding BorderBrush}"
+								>
+							<ContentPresenter
+									SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+									/>
+						</Border>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+			<Style.Triggers>
 				<Trigger Property="IsSelected" Value="True">
 					<Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
 					<Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
@@ -628,90 +674,17 @@
 		</Style>
 
 
-		<Style x:Key="tbx"
-				TargetType="TextBlock"
+		<DataTemplate x:Key="DataGrid2CellTemplate2"
+
 				>
-			<Style.Triggers>
-				<DataTrigger
-						Binding="{Binding ElementName=dataGrid2, Path=CustomBoolProperty, Mode=OneWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}"
-						Value="False"
-						>
-					<Setter Property="Text"
-							Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridCell}},
-						Converter={StaticResource CellColToIndexConverter}}"/>
-					<!-- <Setter Property="Text" Value="{Binding ElementName=dataGrid2, Path=CustomIntProperty}" /> -->
-					<!-- <Setter Property="cp:CustomProperties.GenericBoolTwo" Value="false" /> -->
-					<!-- <Setter Property="Text" Value="{Binding Path=DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridCell}}, Converter={StaticResource TestConverter}, Mode=TwoWay}" /> -->
-
-				</DataTrigger>
-				 <DataTrigger 
-				 		Binding="{Binding ElementName=dataGrid2, Path=CustomBoolProperty, Mode=OneWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" 
-				 		Value="true" 
-				 		> 
-				 	<!-- ~1~ <Setter Property="Text" Value="true" /> @1@  -->
-				 	<!-- ~1~ <Setter Property="cp:CustomProperties.GenericBoolTwo" Value="true" /> @1@  -->
-				 	<Setter Property="Text" 
-				 			Value="-1" /> 
-				 
-				 </DataTrigger> 
-			</Style.Triggers>
-		</Style>
-		<!--  <Setter Property="Text"  -->
-		<!--  Value="{Binding Converter={StaticResource CellColToIndexConverter}}" />  -->
-
-		<DataTemplate x:Key="DataGrid2CellTemplate1"
-				DataType="{x:Type familyInfo:FamilyData}"
-				>
-			<Grid>
-				<StackPanel>
-					<TextBlock Name="Cell2Blk1"
-							Margin="3,0,3,0"
-							Width="60"
-							VerticalAlignment="Bottom"
-							Text="{Binding Path=ParameterValues/ParamValue}"
-							TextWrapping="Wrap"
-							/>
-					<StackPanel
-							Orientation="Horizontal"
-							>
-						<TextBlock Name="Cell2BlkCol"
-								Margin="3,0,3,0"
-								Width="30"
-
-								HorizontalAlignment="Center"
-								VerticalAlignment="Center"
-								TextAlignment="Center"
-								TextWrapping="Wrap"
-								Style="{StaticResource tbx}"
-								/>
-						<!--  Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}, Mode=FindAncestor}, Converter={StaticResource CellColToIndexConverter}}"  -->
-						<!--  Text="{Binding Path=(cp:CustomProperties.DataGridCellColumn), RelativeSource={RelativeSource AncestorType={x:Type DataGridCell}, Mode=FindAncestor}}"  -->
-
-						<TextBlock Name="Cell2BlkRow"
-								Margin="3,0,3,0"
-								Width="30"
-								HorizontalAlignment="Center"
-								VerticalAlignment="Center"
-								Text="{Binding Path=(cp:CustomProperties.DataGridCellRow), RelativeSource={RelativeSource Self}}"
-								TextAlignment="Center"
-								TextWrapping="Wrap"
-								/>
-					</StackPanel>
-
-				</StackPanel>
-
-
-			</Grid>
-			<!-- <DataTemplate.Triggers> -->
-			<!--  <Trigger Property="cp:CustomProperties.ColumnReordering"  -->
-			<!--  Value="True"  -->
-			<!--  SourceName="dataGrid2">  -->
-			<!--  <Setter Property="Text" TargetName="Cell2BlkCol"  -->
-			<!--  Value="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource CellColToIndexConverter}}" />  -->
-			<!-- 	</Trigger> -->
-			<!-- </DataTemplate.Triggers> -->
+			<TextBlock Name="Cell2Blk1"
+					Margin="3,0,3,0"
+					Width="60"
+					VerticalAlignment="Bottom"
+					TextWrapping="Wrap"
+					Text="{Binding ParamValue}"
+					/>
 		</DataTemplate>
-
 
 
 		<Style x:Key="DataGridRowStyle1"
@@ -1362,7 +1335,7 @@
 				Foreground="Black"
 				/>
 
-		<Label Content="{Binding ElementName=dataGrid2, Path=CustomBoolProperty}"
+		<Label Content="label"
 				Grid.Row="4"
 				Grid.Column="1"
 				Margin="0,30,0,0"
@@ -1375,7 +1348,7 @@
 				/>
 
 
-		<support:DataGridCs x:Name="dataGrid2"
+		<DataGrid x:Name="dataGrid2"
 				Grid.Row="2"
 				Grid.Column="0"
 				Margin="0,0,0,10"
@@ -1387,7 +1360,8 @@
 				AutoGenerateColumns="False"
 				CanUserAddRows="{Binding Fm.CanUserAddRows, FallbackValue=False, Mode=OneWay}"
 				CanUserDeleteRows="{Binding Fm.CanUserDeleteRows, FallbackValue=false, Mode=OneWay}"
-				CellStyle="{StaticResource DataGrid2CellStyle1}"
+				CellStyle="{DynamicResource DataGridCellStyle2}"
+				ColumnReordered="DataGrid2_OnColumnReordered"
 				ColumnWidth="Auto"
 				EnableColumnVirtualization="False"
 				HeadersVisibility="All"
@@ -1397,6 +1371,7 @@
 				IsSynchronizedWithCurrentItem="True"
 				ItemsSource="{Binding Fm.Fd}"
 				>
+			<!--  CellStyle="{StaticResource DataGrid2CellStyle1}"  -->
 			<!--  RowHeaderStyle="{StaticResource DataGridRowHeaderStyle1}"  -->
 			<!--  RowHeaderTemplate="{DynamicResource RowHeaderTemplate1}"  -->
 			<!--  ItemsSource="{Binding DataContext.Fd}"  -->
@@ -1418,10 +1393,8 @@
 
 				</DataGridTextColumn>
 			</DataGrid.Columns>
-		</support:DataGridCs>
 
-
-
+		</DataGrid>
 
 		<!--#endregion-->
 
