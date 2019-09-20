@@ -577,51 +577,139 @@
 							TextWrapping="Wrap"
 							/>
 					<!--  Text="{Binding Path=ParameterValues/ParamValue, Converter={StaticResource TestConverter}}"  -->
-					<!--  <StackPanel  -->
-					<!--  Orientation="Horizontal"  -->
-					<!--  >  -->
-					<!--    -->
-					<!--  <TextBlock Name="Cell2BlkCol"  -->
-					<!--  Margin="3,0,3,0"  -->
-					<!--  Width="30"  -->
-					<!--  HorizontalAlignment="Center"  -->
-					<!--  VerticalAlignment="Center"  -->
-					<!--  cp:CustomProperties.GenericObjectOne="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridCell}}}"  -->
-					<!--  Tag="{Binding UpdateColumn, ElementName=mainWindow}"  -->
-					<!--  TextAlignment="Center"  -->
-					<!--  TextWrapping="Wrap"  -->
-					<!--  >  -->
-					<!-- 		<TextBlock.Text> -->
-					<!--  <MultiBinding  -->
-					<!--  Converter="{StaticResource CellColToIndex}"  -->
-					<!--  Mode="OneWay"  -->
-					<!--  >  -->
-					<!--  <Binding  -->
-					<!--  Path="Tag"  -->
-					<!--  RelativeSource="{RelativeSource Self}"  -->
-					<!--  />  -->
-					<!--  <Binding  -->
-					<!--  Path="(cp:CustomProperties.GenericObjectOne)"  -->
-					<!--  RelativeSource="{RelativeSource Self}"  -->
-					<!--  />  -->
-					<!-- 			</MultiBinding> -->
-					<!-- 		</TextBlock.Text> -->
-					<!--    -->
-					<!-- 	</TextBlock> -->
-					<!--    -->
-					<!--  <TextBlock Name="Cell2BlkRow"  -->
-					<!--  Margin="3,0,3,0"  -->
-					<!--  Width="30"  -->
-					<!--  HorizontalAlignment="Center"  -->
-					<!--  VerticalAlignment="Center"  -->
-					<!--  cp:CustomProperties.GenericObjectOne="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridCell}}}"  -->
-					<!--  Text="{Binding Path=(cp:CustomProperties.GenericObjectOne), RelativeSource={RelativeSource Self}, Converter={StaticResource CellRowToIndex}, Mode=TwoWay}"  -->
-					<!--  TextAlignment="Center"  -->
-					<!--  TextWrapping="Wrap"  -->
-					<!--  />  -->
-					<!-- </StackPanel> -->
+					<StackPanel
+							Orientation="Horizontal"
+							>
+
+						<TextBlock Name="Cell2BlkCol"
+								Margin="3,0,3,0"
+								Width="30"
+								HorizontalAlignment="Center"
+								VerticalAlignment="Center"
+								cp:CustomProperties.GenericObjectOne="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridCell}}}"
+								Tag="{Binding UpdateColumn, ElementName=mainWindow}"
+								TextAlignment="Center"
+								TextWrapping="Wrap"
+								>
+							<TextBlock.Text>
+								<MultiBinding
+										Converter="{StaticResource CellColToIndex}"
+										Mode="OneWay"
+										>
+									<Binding
+											Path="Width"
+											RelativeSource="{RelativeSource Self}"
+											/>
+									<Binding
+											Path="Tag"
+											RelativeSource="{RelativeSource Self}"
+											/>
+									<Binding
+											Path="(cp:CustomProperties.GenericObjectOne)"
+											RelativeSource="{RelativeSource Self}"
+											/>
+
+								</MultiBinding>
+							</TextBlock.Text>
+
+						</TextBlock>
+
+						<TextBlock Name="Cell2BlkRow"
+								Margin="3,0,3,0"
+								Width="30"
+								HorizontalAlignment="Center"
+								VerticalAlignment="Center"
+								cp:CustomProperties.GenericObjectOne="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridCell}}}"
+								Text="{Binding Path=(cp:CustomProperties.GenericObjectOne), RelativeSource={RelativeSource Self}, Converter={StaticResource CellRowToIndex}, Mode=TwoWay}"
+								TextAlignment="Center"
+								TextWrapping="Wrap"
+								/>
+					</StackPanel>
 				</StackPanel>
 			</Grid>
+		</DataTemplate>
+
+
+
+		<DataTemplate x:Key="dt"
+				>
+			<StackPanel
+					Orientation="Vertical"
+					>
+				<StackPanel
+						Orientation="Horizontal"
+						>
+					<Label Content="R:"
+							Margin="1,0,1,0"
+							Padding="0"
+							/>
+					<TextBlock Name="Cell2BlkRow"
+							Margin="0,0,3,0"
+							Width="20"
+							Padding="0"
+							HorizontalAlignment="Center"
+							cp:CustomProperties.GenericObjectOne="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridCell}}}"
+							Text="{Binding Path=(cp:CustomProperties.GenericObjectOne), RelativeSource={RelativeSource Self}, Converter={StaticResource CellRowToIndex}, Mode=TwoWay}"
+							TextAlignment="Center"
+							TextWrapping="Wrap"
+							/>
+					<Label Content="C:"
+							Margin="1,0,1,0"
+							Padding="0"
+							/>
+					<TextBlock Name="Cell2BlkCol"
+							Margin="0,0,3,0"
+							Width="20"
+							HorizontalAlignment="Center"
+							VerticalAlignment="Center"
+							cp:CustomProperties.GenericObjectOne="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridCell}}}"
+							Tag="{Binding UpdateColumn, ElementName=mainWindow}"
+							TextAlignment="Center"
+							TextWrapping="Wrap"
+							>
+						<TextBlock.Text>
+							<MultiBinding
+									Converter="{StaticResource CellColToIndex}"
+									Mode="OneWay"
+									>
+								<Binding
+										Path="Tag"
+										RelativeSource="{RelativeSource Self}"
+										/>
+								<Binding
+										Path="(cp:CustomProperties.GenericObjectOne)"
+										RelativeSource="{RelativeSource Self}"
+										/>
+							</MultiBinding>
+						</TextBlock.Text>
+					</TextBlock>
+				</StackPanel>
+				<StackPanel
+						Orientation="Horizontal"
+						>
+					<Label Content="R:"
+							Margin="1,0,1,0"
+							Padding="0"
+							/>
+					<Label Content="{Binding Path=DataContext.ParameterValues/Row, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridCell}}}"
+							Margin="1,0,1,0"
+							Padding="0"
+							Width="20"
+							HorizontalContentAlignment="Center"
+							/>
+					<Label Content="C:"
+							Margin="1,0,1,0"
+							Padding="0"
+							/>
+					<Label Content="{Binding Path=DataContext.ParameterValues/Col, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridCell}}}"
+							Margin="1,0,1,0"
+							Padding="0"
+							Width="20"
+							HorizontalContentAlignment="Center"
+							/>
+
+				</StackPanel>
+			</StackPanel>
 		</DataTemplate>
 
 		<Style x:Key="DataGridCellStyle2"
@@ -630,7 +718,7 @@
 			<Setter Property="Background" Value="Transparent" />
 			<Setter Property="BorderBrush" Value="Transparent" />
 			<Setter Property="BorderThickness" Value="1" />
-			<Setter Property="ContentTemplate" Value="{DynamicResource DataGrid2CellTemplate2}" />
+
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate
@@ -642,9 +730,16 @@
 								BorderThickness="{TemplateBinding BorderThickness}"
 								BorderBrush="{TemplateBinding BorderBrush}"
 								>
-							<ContentPresenter
-									SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-									/>
+							<StackPanel
+									Orientation="Vertical"
+									>
+								<ContentPresenter
+										SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+										/>
+								<ContentControl
+										ContentTemplate="{StaticResource dt}"
+										/>
+							</StackPanel>
 						</Border>
 					</ControlTemplate>
 				</Setter.Value>
@@ -674,17 +769,6 @@
 		</Style>
 
 
-		<DataTemplate x:Key="DataGrid2CellTemplate2"
-
-				>
-			<TextBlock Name="Cell2Blk1"
-					Margin="3,0,3,0"
-					Width="60"
-					VerticalAlignment="Bottom"
-					TextWrapping="Wrap"
-					Text="{Binding ParamValue}"
-					/>
-		</DataTemplate>
 
 
 		<Style x:Key="DataGridRowStyle1"
@@ -755,8 +839,6 @@
 				</Trigger>
 			</Style.Triggers>
 		</Style>
-
-
 
 	</Window.Resources>
 
@@ -1360,7 +1442,7 @@
 				AutoGenerateColumns="False"
 				CanUserAddRows="{Binding Fm.CanUserAddRows, FallbackValue=False, Mode=OneWay}"
 				CanUserDeleteRows="{Binding Fm.CanUserDeleteRows, FallbackValue=false, Mode=OneWay}"
-				CellStyle="{DynamicResource DataGridCellStyle2}"
+				CellStyle="{StaticResource DataGridCellStyle2}"
 				ColumnReordered="DataGrid2_OnColumnReordered"
 				ColumnWidth="Auto"
 				EnableColumnVirtualization="False"
@@ -1392,6 +1474,7 @@
 					</DataGridTextColumn.Header>
 
 				</DataGridTextColumn>
+
 			</DataGrid.Columns>
 
 		</DataGrid>

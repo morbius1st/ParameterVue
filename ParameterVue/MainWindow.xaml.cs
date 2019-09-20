@@ -49,6 +49,28 @@ namespace ParameterVue
 			}
 		}
 
+		private int row;
+
+		public int Row
+		{
+			get
+			{ 
+				return row++;
+			}
+			set => row = value;
+		}
+
+		private int col;
+
+		public int Col
+		{
+			get
+			{
+				return col++;
+			}
+			set => col = value;
+		}
+
 
 		public static ConfigurationSettings lbc { get;  set; } = new ConfigurationSettings();
 

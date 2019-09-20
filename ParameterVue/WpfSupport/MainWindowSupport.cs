@@ -81,7 +81,7 @@ namespace ParameterVue.WpfSupport
 			col.Header = cs;
 //			col.HeaderTemplate = dt;
 			col.HeaderStyle = dt;
-			
+
 
 			dg.Columns.Add(col);
 

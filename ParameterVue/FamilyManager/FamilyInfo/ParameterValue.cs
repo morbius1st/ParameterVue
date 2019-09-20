@@ -24,8 +24,8 @@ namespace ParameterVue.FamilyManager.FamilyInfo
 		private string paramOrigValue;
 		private bool revised;
 		private bool invalid;
-		private int row;
-		private int col;
+		private int row = 100;
+		private int col = 200;
 		private DataGridCell cell;
 
 		private Parameter parameter;

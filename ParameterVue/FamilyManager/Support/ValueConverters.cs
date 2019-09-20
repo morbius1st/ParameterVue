@@ -11,6 +11,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Markup;
 using System.Windows.Media;
+using ParameterVue.FamilyManager.FamilyInfo;
 
 namespace ParameterVue.FamilyManager.Support
 {
@@ -68,7 +69,16 @@ namespace ParameterVue.FamilyManager.Support
 
 			DataGridCell cell = (DataGridCell) value[1];
 
-			return cell.Column.DisplayIndex.ToString();
+			int col = cell.Column.DisplayIndex;
+			
+			if (cell.DataContext is FamilyData)
+			{
+				FamilyData fd = (FamilyData) cell.DataContext;
+
+				fd.ParameterValues[col].Col = col;
+			}
+
+			return col.ToString();
 		}
 
 		public object[] ConvertBack(object value, Type[] targetType, object parameter, System.Globalization.CultureInfo culture)
