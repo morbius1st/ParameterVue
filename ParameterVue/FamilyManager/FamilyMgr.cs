@@ -168,7 +168,7 @@ namespace ParameterVue.FamilyManager
 
 		private ColumnSpec CreateColumnSpec(Parameter p, int colIdx)
 		{
-			ColumnSpec cs = new ColumnSpec(colIdx, p);
+			ColumnSpec cs = new ColumnSpec( p, colIdx);
 
 			cs.Choices = null;
 

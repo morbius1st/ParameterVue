@@ -306,6 +306,7 @@
 				TargetType="{x:Type DataGridColumnHeader}"
 				>
 			<Setter Property="ContentTemplate" Value="{DynamicResource HeaderTemplate1}" />
+			<Setter Property="Height" Value="50" />
 			<Setter Property="Margin" Value="3,1,3,1" />
 			<Setter Property="Template">
 				<Setter.Value>
@@ -394,6 +395,32 @@
 							TextWrapping="Wrap"
 							Foreground="{Binding HeaderFont.Foreground, FallbackValue={StaticResource Ftb}, Mode=OneWay}"
 							/>
+					<StackPanel
+							Orientation="Horizontal"
+							>
+						<Label Content="P:"
+								Margin="1,0,1,0"
+								Padding="0"
+								/>
+						<Label Content="{Binding Path=ColumnPosition, FallbackValue='None2', Mode=OneWay}"
+								Margin="1,0,1,0"
+								Width="20"
+								Padding="0"
+								HorizontalContentAlignment="Center"
+								/>
+						<Label Content="I:"
+								Margin="1,0,1,0"
+								Padding="0"
+								/>
+						<Label Content="{Binding Path=ColumnIndex, FallbackValue='None2', Mode=OneWay}"
+								Margin="1,0,1,0"
+								Width="20"
+								Padding="0"
+								HorizontalContentAlignment="Center"
+								/>
+
+
+					</StackPanel>
 
 				</StackPanel>
 
@@ -629,8 +656,6 @@
 			</Grid>
 		</DataTemplate>
 
-
-
 		<DataTemplate x:Key="dt"
 				>
 			<StackPanel
@@ -672,43 +697,72 @@
 									Converter="{StaticResource CellColToIndex}"
 									Mode="OneWay"
 									>
+								<!-- 0 -->
+								<!-- <Binding -->
+								<!-- 		Mode="OneWay" -->
+								<!-- 		Path="Tag" -->
+								<!-- 		RelativeSource="{RelativeSource Self}" -->
+								<!-- 		/> -->
+								<!-- 0 -->
 								<Binding
-										Path="Tag"
-										RelativeSource="{RelativeSource Self}"
+										Mode="OneWay"
+										Path="DataContext.ParameterValues"
+										RelativeSource="{RelativeSource Mode=FindAncestor,
+																										AncestorType={x:Type DataGridCell}}"
 										/>
+								<!-- 1 -->
 								<Binding
-										Path="(cp:CustomProperties.GenericObjectOne)"
-										RelativeSource="{RelativeSource Self}"
+										FallbackValue="n/a"
+										Mode="OneWay"
+										Path="Column.Header.ColumnIndex"
+										RelativeSource="{RelativeSource Mode=FindAncestor,
+																										AncestorType={x:Type DataGridCell}}"
 										/>
+								<!-- 2 -->
+								<Binding
+										Mode="OneWay"
+										Path="Column.DisplayIndex"
+										RelativeSource="{RelativeSource Mode=FindAncestor,
+																										AncestorType={x:Type DataGridCell}}"
+										/>
+								<!-- 4 -->
+								<!-- <Binding -->
+								<!-- 		Mode="OneWay" -->
+								<!-- 		RelativeSource="{RelativeSource Mode=FindAncestor, -->
+								<!-- 																		AncestorType={x:Type DataGridCell}}" -->
+								<!-- 		/> -->
+
 							</MultiBinding>
 						</TextBlock.Text>
 					</TextBlock>
 				</StackPanel>
-				<StackPanel
-						Orientation="Horizontal"
-						>
-					<Label Content="R:"
-							Margin="1,0,1,0"
-							Padding="0"
-							/>
-					<Label Content="{Binding Path=DataContext.ParameterValues/Row, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridCell}}}"
-							Margin="1,0,1,0"
-							Padding="0"
-							Width="20"
-							HorizontalContentAlignment="Center"
-							/>
-					<Label Content="C:"
-							Margin="1,0,1,0"
-							Padding="0"
-							/>
-					<Label Content="{Binding Path=DataContext.ParameterValues/Col, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridCell}}}"
-							Margin="1,0,1,0"
-							Padding="0"
-							Width="20"
-							HorizontalContentAlignment="Center"
-							/>
-
-				</StackPanel>
+				<!--  col in the below does not work  -->
+				<!--  <StackPanel  -->
+				<!--  Orientation="Horizontal"  -->
+				<!--  >  -->
+				<!--  <Label Content="R:"  -->
+				<!--  Margin="1,0,1,0"  -->
+				<!--  Padding="0"  -->
+				<!--  />  -->
+				<!--  <Label Content="{Binding Path=DataContext.ParameterValues/Row, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridCell}}}"  -->
+				<!--  Margin="1,0,1,0"  -->
+				<!--  Width="20"  -->
+				<!--  Padding="0"  -->
+				<!--  HorizontalContentAlignment="Center"  -->
+				<!--  />  -->
+				<!--  <Label Content="C:"  -->
+				<!--  Margin="1,0,1,0"  -->
+				<!--  Padding="0"  -->
+				<!--  />  -->
+				<!--  <Label  -->
+				<!--  Content="{Binding Path=DataContext.ParameterValues/Col,  -->
+				<!--  RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridCell}}}"  -->
+				<!--  Margin="1,0,1,0"  -->
+				<!--  Width="20"  -->
+				<!--  Padding="0"  -->
+				<!--  HorizontalContentAlignment="Center"  -->
+				<!--  />  -->
+				<!-- </StackPanel>  -->
 			</StackPanel>
 		</DataTemplate>
 
@@ -735,7 +789,7 @@
 									>
 								<ContentPresenter
 										SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-										/>
+								/>
 								<ContentControl
 										ContentTemplate="{StaticResource dt}"
 										/>
@@ -1453,10 +1507,6 @@
 				IsSynchronizedWithCurrentItem="True"
 				ItemsSource="{Binding Fm.Fd}"
 				>
-			<!--  CellStyle="{StaticResource DataGrid2CellStyle1}"  -->
-			<!--  RowHeaderStyle="{StaticResource DataGridRowHeaderStyle1}"  -->
-			<!--  RowHeaderTemplate="{DynamicResource RowHeaderTemplate1}"  -->
-			<!--  ItemsSource="{Binding DataContext.Fd}"  -->
 			<DataGrid.Columns>
 				<DataGridTextColumn
 						Binding="{Binding ParameterValues[0].ParamValue}"
@@ -1464,12 +1514,12 @@
 					<DataGridTextColumn.Header>
 						<DataGridColumnHeader
 								Style="{StaticResource DataGridColumnHeaderStyle3}"
-								>
-							<DataGridColumnHeader.Content>
-								<Binding
-										Path="Fm.Cd.ColumnSpecs[0]"
-										/>
-							</DataGridColumnHeader.Content>
+						>
+							 <DataGridColumnHeader.Content>
+								 
+								<Binding Path="Fm.Cd.ColumnSpecs[0]" Mode="OneTime" Converter="{StaticResource TestConverter}"/> 
+							 </DataGridColumnHeader.Content> 
+
 						</DataGridColumnHeader>
 					</DataGridTextColumn.Header>
 

@@ -1,7 +1,9 @@
 ﻿#region + Using Directives
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -11,6 +13,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Autodesk.Revit.DB;
 using ParameterVue.WpfSupport;
+using ConfigurationSettings = ParameterVue.WpfSupport.ConfigurationSettings;
 
 #endregion
 
@@ -30,6 +33,7 @@ namespace ParameterVue.FamilyManager.FamilyInfo
 		DROPDOWN,
 		URI
 	}
+
 	// holds the definition information about a column
 	public class ColumnSpec : INotifyPropertyChanged
 	{
@@ -45,19 +49,37 @@ namespace ParameterVue.FamilyManager.FamilyInfo
 		private double columnWidth = -1;
 		private int widestCell = MinAllowedValueWidth;
 
-		#endregion
+		private static int currentColumn = -1;
+
+	#endregion
 
 
-		#region ctor
+	#region ctor
 
-		public ColumnSpec(int idx, Parameter p) 
+		public ColumnSpec( Parameter p, int pos = -1)
 		{
-			ColumnIndex = idx;
+			VerifyInit();
+
+			if (pos != -1)
+				ColumnPosition = pos;
 
 			ConfigurePerParameter(p);
 		}
 
-		public ColumnSpec() {}
+		public ColumnSpec() 
+		{
+			VerifyInit();
+		}
+
+		private void VerifyInit()
+		{
+
+			if (currentColumn == -1)
+				throw new InvalidOperationException();
+
+			ColumnPosition = currentColumn;
+			ColumnIndex = currentColumn++;
+		}
 
 	#endregion
 
@@ -78,7 +100,10 @@ namespace ParameterVue.FamilyManager.FamilyInfo
 
 
 		// get the column position index for this column
-		public int ColumnIndex { get; set; } = 0;
+		public int ColumnPosition { get; set; } = 0;
+
+		// get the column position index for this column
+		public int ColumnIndex { get; private set; } = 0;
 
 		public ColumnType ColumnType { get; private set; } = ColumnType.TEXTBOX;
 
@@ -136,6 +161,13 @@ namespace ParameterVue.FamilyManager.FamilyInfo
 
 	#endregion
 
+	#region methods
+
+		public static void Initalize()
+		{
+			currentColumn = 0;
+		}
+
 		public void ConfigurePerParameter(Parameter p)
 		{
 			ColumnTitle = p.Definition.Name;
@@ -181,12 +213,18 @@ namespace ParameterVue.FamilyManager.FamilyInfo
 			}
 		}
 
+	#endregion
+
+	#region property handling
+
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		private void OnPropertyChange([CallerMemberName] string memberName = "")
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName));
 		}
+
+	#endregion
 
 //		public override string ToString()
 //		{

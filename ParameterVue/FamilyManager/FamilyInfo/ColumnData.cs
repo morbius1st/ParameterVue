@@ -1,6 +1,7 @@
 ﻿#region + Using Directives
 
 using System.Collections.ObjectModel;
+using System.Dynamic;
 using Autodesk.Revit.DB;
 
 #endregion
@@ -22,21 +23,33 @@ namespace ParameterVue.FamilyManager.FamilyInfo
 		private const string SELECTED_COL_TITLE = "☑";
 		private const string FAMILYNAME_COL_TITLE = "Family Name";
 
-		public ObservableCollection<ColumnSpec> ColumnSpecs { get; set; }
+		public ObservableCollection<ColumnSpec> ColumnSpecs { get; private set; }
 
 		public  ColumnData()
 		{
-			ColumnSpecs  = new ObservableCollection<ColumnSpec>();
+			Initalize();
+
+//			SetSelected();
+//			SetFamilyName();
+
+//			Parameter p = new Parameter();
+//			p.Definition = new InternalDefinition();
+//			p.Definition.Name = "Column Title";
+//
+//			ColumnSpec cs = new ColumnSpec( p, 0);
+//			ColumnSpecs.Add(cs);
+		}
+
+		public void Initalize()
+		{
+			ColumnSpec.Initalize();
 
 			SetSelected();
 			SetFamilyName();
 
-			Parameter p = new Parameter();
-			p.Definition = new InternalDefinition();
-			p.Definition.Name = "Column Title";
+			ColumnSpec.Initalize();
 
-			ColumnSpec cs = new ColumnSpec(0, p);
-			ColumnSpecs.Add(cs);
+			ColumnSpecs  = new ObservableCollection<ColumnSpec>();
 		}
 
 		public static ColumnSpec SelectedColSpec()
@@ -64,12 +77,12 @@ namespace ParameterVue.FamilyManager.FamilyInfo
 
 		private void SetSelected()
 		{
-			Selected = new ColumnSpec(0, TestData.DefineParameter("Selected", "Selected", "string", "YesNo", "none", "none"));
+			Selected = new ColumnSpec( TestData.DefineParameter("Selected", "Selected", "string", "YesNo", "none", "none"), 0);
 		}
 
 		private void SetFamilyName()
 		{
-			FamilyName = new ColumnSpec(1, TestData.DefineParameter("Family Name", "Family Name", "string", "Text", "none", "none"));
+			FamilyName = new ColumnSpec( TestData.DefineParameter("Family Name", "Family Name", "string", "Text", "none", "none"), 1);
 		}
 	}
 }

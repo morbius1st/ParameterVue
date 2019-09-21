@@ -28,6 +28,10 @@ namespace ParameterVue.WpfSupport.CustomXAMLProperties
 		public static readonly DependencyProperty GenericObjectOneProperty = DependencyProperty.RegisterAttached(
 			"GenericObjectOne", typeof(object), typeof(CustomProperties),
 			new PropertyMetadata(0));
+		
+		public static readonly DependencyProperty GenericObjectTwoProperty = DependencyProperty.RegisterAttached(
+			"GenericObjectTwo", typeof(object), typeof(CustomProperties),
+			new PropertyMetadata(0));
 
 		public static readonly DependencyProperty GenericFontProperty = DependencyProperty.RegisterAttached(
 			"GenericFont", typeof(Font), typeof(CustomProperties),
@@ -100,6 +104,22 @@ namespace ParameterVue.WpfSupport.CustomXAMLProperties
 		{
 			Debug.WriteLine("GetGenericObjectOne| ");
 			return (object) e.GetValue(GenericObjectOneProperty);
+		}
+
+	#endregion
+						
+	#region GenericObjectTwo
+
+		public static void SetGenericObjectTwo(UIElement e, object value)
+		{
+			Debug.WriteLine("SetGenericObjectTwo| " + value);
+			e.SetValue(GenericObjectTwoProperty, value);
+		}
+
+		public static object GetGenericObjectTwo(UIElement e)
+		{
+			Debug.WriteLine("GetGenericObjectTwo| ");
+			return (object) e.GetValue(GenericObjectTwoProperty);
 		}
 
 	#endregion

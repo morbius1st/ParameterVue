@@ -20,19 +20,17 @@ namespace ParameterVue.FamilyManager.Support
 			
 			p = Fd[Fd.Count - 1].ParameterValues;
 
-			Cd.ColumnSpecs = new ObservableCollection<ColumnSpec>();
-
 			pa = TestData.DefineParameter(new [] {"3/32\"" , "Text Size" , "Double "  , "105"    , "UT_SheetLength" , "DUT_FRACTIONAL_INCHES"});
-			Cd.ColumnSpecs.Add(new ColumnSpec(0, pa));
+			Cd.ColumnSpecs.Add(new ColumnSpec( pa, 0));
 			p.Add(new ParameterValue(pa));
 			
 			pa = TestData.DefineParameter(new [] {"Arial1" , "Text Font" , "string "  , "Text "  , "UT_Number"      , "(no unit type)"});
-			Cd.ColumnSpecs.Add(new ColumnSpec(1, pa));
+			Cd.ColumnSpecs.Add(new ColumnSpec( pa, 1));
 			p.Add(new ParameterValue(pa));
 
 			
 			pa = TestData.DefineParameter(new [] {"1/2\" " , "Tab Size"  , "Double "  , "105"    , "UT_SheetLength ", "DUT_FRACTIONAL_INCHES"});
-			Cd.ColumnSpecs.Add(new ColumnSpec(2, pa));
+			Cd.ColumnSpecs.Add(new ColumnSpec( pa, 2));
 			p.Add(new ParameterValue(pa));
 
 
